@@ -7,7 +7,7 @@
 // @match       https://www.nintendo.com/store/*
 // @grant       none
 // @run-at      document-idle
-// @version     2023.01.23
+// @version     2023.03.03
 // @icon        https://assets.nintendo.com/image/upload/ncom/icons/fav-icons/apple-touch-icon.png
 // @description Automatically fill out Nintendo Age verification form to view mature games.
 // ==/UserScript==
@@ -15,7 +15,7 @@
 window.addEventListener(
     "load",
     function () {
-        setTimeout(function () {
+        const observer = new MutationObserver((mutationList, observer) => {
             const content = document.body.textContent || document.body.innerText;
             const isAgeVerification = content.indexOf("Age verification") !== -1;
 
@@ -27,8 +27,14 @@ window.addEventListener(
                 const continueBtn = document.querySelector('button[type="submit"]');
                 continueBtn.disabled = false;
                 continueBtn.click();
+
+                // Clean up
+                observer.disconnect();
             }
-        }, 4000);
+        });
+
+        const targetNode = document.body;
+        observer.observe(targetNode, { childList: true, subtree: true });
     },
     false
 );
