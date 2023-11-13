@@ -15,4 +15,4 @@
     if (isTitlebarVisible) {
         document.title = `<-POPUP-> ${document.title}`;
     }
-})()
+})();
